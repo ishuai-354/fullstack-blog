@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>王佳骏 · 作品集博客</title>
+<style>
+  :root{
+    --bg:#0b0f17; --card:#131a26; --line:#1f2a3a; --text:#e6edf7; --muted:#8b9bb4;
+    --accent:#4f8cff; --accent2:#7c5cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#17233a 0%,var(--bg) 55%);
+       color:var(--text);font:15px/1.7 "Segoe UI","Microsoft YaHei",system-ui,sans-serif;min-height:100vh}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1040px;margin:0 auto;padding:32px 20px 80px}
+  header.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+  .brand{font-size:26px;font-weight:700;letter-spacing:.5px}
+  .brand span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .stats{display:flex;gap:18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;min-width:88px;text-align:center}
+  .stat b{display:block;font-size:20px}
+  .stat i{font-style:normal;color:var(--muted);font-size:12px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  input,select,textarea,button{font:inherit;color:inherit}
+  .toolbar input,.toolbar select{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;outline:none;flex:1;min-width:180px}
+  .toolbar input:focus{border-color:var(--accent)}
+  .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));border:0;border-radius:10px;padding:10px 18px;color:#fff;cursor:pointer;font-weight:600}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:500}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;color:var(--muted);font-size:13px}
+  .chip.active{border-color:var(--accent);color:#fff;background:rgba(79,140,255,.15)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;
+        transition:transform .15s,border-color .15s;display:flex;flex-direction:column;gap:10px}
+  .card:hover{transform:translateY(-3px);border-color:#2c3d57}
+  .cat{font-size:12px;color:var(--accent);background:rgba(79,140,255,.12);padding:2px 10px;border-radius:999px;display:inline-block}
+  .card h3{margin:2px 0 0;font-size:17px}
+  .excerpt{color:var(--muted);font-size:13.5px;flex:1}
+  .meta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:10px}
+  .pager{display:flex;gap:8px;justify-content:center;margin-top:26px}
+  .pager button{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--muted)}
+  .pager button.on{border-color:var(--accent);color:#fff}
+  .empty{color:var(--muted);text-align:center;padding:60px 0}
+  .modal{position:fixed;inset:0;background:rgba(3,6,12,.72);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .modal.on{display:flex}
+  .panel{background:#101825;border:1px solid var(--line);border-radius:16px;width:min(720px,100%);max-height:86vh;overflow:auto;padding:24px}
+  .panel h2{margin:0 0 14px;font-size:19px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .field input,.field textarea,.field select{width:100%;background:#0b1119;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
+  .field textarea{min-height:190px;resize:vertical}
+  .row{display:flex;gap:12px}
+  .row .field{flex:1}
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+  .article h2{margin:0 0 8px}
+  .article .body{white-space:pre-wrap;margin:18px 0;line-height:1.9}
+  .tag{font-size:12px;color:var(--muted);margin-right:8px}
+  .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#1b2740;border:1px solid var(--line);
+         padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast.on{opacity:1;bottom:44px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:50px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="brand">王佳骏 · <span>作品集博客</span></div>
+      <div class="sub">全栈练习项目 · 前端页面 + Node 接口 + SQLite 数据库</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="s-total">0</b><i>文章</i></div>
+      <div class="stat"><b id="s-views">0</b><i>总浏览</i></div>
+      <div class="stat"><b id="s-cats">0</b><i>分类</i></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input id="kw" placeholder="搜索标题或正文…" />
+    <select id="cat"><option value="">全部分类</option></select>
+    <button class="btn" id="btn-new">写文章</button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">没有找到文章</div>
+  <div class="pager" id="pager"></div>
+  <footer>© 2026 王佳骏 · 用 Vibe Coding 方式完成的全栈练习</footer>
+</div>
+
+<!-- 文章详情 -->
+<div class="modal" id="m-detail"><div class="panel">
+  <div class="article">
+    <div><span class="cat" id="d-cat"></span></div>
+    <h2 id="d-title"></h2>
+    <div class="meta" style="border:0;padding:0"><span id="d-date"></span><span id="d-views"></span></div>
+    <div class="body" id="d-body"></div>
+    <div id="d-tags"></div>
+  </div>
+  <div class="actions">
+    <button class="btn ghost" id="d-edit">编辑</button>
+    <button class="btn ghost" id="d-del">删除</button>
+    <button class="btn" onclick="closeAll()">关闭</button>
+  </div>
+</div></div>
+
+<!-- 编辑/新建 -->
+<div class="modal" id="m-edit"><div class="panel">
+  <h2 id="e-title">写文章</h2>
+  <div class="field"><label>标题</label><input id="e-title-input" placeholder="给文章起个名字" /></div>
+  <div class="row">
+    <div class="field"><label>分类</label><input id="e-cat" placeholder="项目复盘 / 学习笔记 / 前端" /></div>
+    <div class="field"><label>标签（逗号分隔）</label><input id="e-tags" placeholder="React,CSS" /></div>
+  </div>
+  <div class="field"><label>正文</label><textarea id="e-body" placeholder="写点什么…"></textarea></div>
+  <div class="field"><label>管理口令</label><input id="e-token" type="password" placeholder="发布/修改需要口令" /></div>
+  <div class="actions">
+    <button class="btn ghost" onclick="closeAll()">取消</button>
+    <button class="btn" id="e-save">保存</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = { keyword:"", category:"", page:1, size:6, total:0, editing:null, current:null };
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("on"); setTimeout(()=>t.classList.remove("on"),1800); }
+function closeAll(){ document.querySelectorAll(".modal").forEach(m=>m.classList.remove("on")); }
+
+async function api(path, opts){
+  const r = await fetch(path, opts);
+  const data = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error || ("请求失败 "+r.status));
+  return data;
+}
+
+async function loadStats(){
+  const s = await api("/api/stats");
+  $("s-total").textContent = s.total; $("s-views").textContent = s.views; $("s-cats").textContent = s.cats;
+}
+
+async function loadList(){
+  const q = new URLSearchParams({ keyword:state.keyword, category:state.category, page:state.page, size:state.size });
+  const data = await api("/api/posts?"+q);
+  state.total = data.total;
+
+  // 分类下拉 + 标签
+  const sel = $("cat");
+  sel.innerHTML = '<option value="">全部分类</option>' +
+    data.categories.map(c=>`<option value="${esc(c.category)}" ${c.category===state.category?"selected":""}>${esc(c.category)} (${c.n})</option>`).join("");
+  $("chips").innerHTML = ['<span class="chip '+(state.category===""?"active":"")+'" data-c="">全部</span>']
+    .concat(data.categories.map(c=>`<span class="chip ${c.category===state.category?"active":""}" data-c="${esc(c.category)}">${esc(c.category)}</span>`)).join("");
+  document.querySelectorAll(".chip").forEach(el=>el.onclick=()=>{ state.category=el.dataset.c; state.page=1; loadList(); });
+
+  const grid = $("grid");
+  grid.innerHTML = data.posts.map(p=>`
+    <div class="card" data-id="${p.id}">
+      <div><span class="cat">${esc(p.category)}</span></div>
+      <h3>${esc(p.title)}</h3>
+      <div class="excerpt">${esc(p.excerpt)}…</div>
+      <div class="meta"><span>${esc((p.created_at||"").slice(0,10))}</span><span>👁 ${p.views}</span></div>
+    </div>`).join("");
+  $("empty").style.display = data.posts.length ? "none" : "block";
+  grid.querySelectorAll(".card").forEach(el=>el.onclick=()=>openDetail(el.dataset.id));
+
+  const pages = Math.max(1, Math.ceil(data.total/state.size));
+  $("pager").innerHTML = Array.from({length:pages},(_,i)=>
+    `<button class="${i+1===state.page?"on":""}" data-p="${i+1}">${i+1}</button>`).join("");
+  $("pager").querySelectorAll("button").forEach(b=>b.onclick=()=>{ state.page=Number(b.dataset.p); loadList(); });
+}
+
+async function openDetail(id){
+  const p = await api("/api/posts/"+id);
+  state.current = p;
+  $("d-cat").textContent = p.category;
+  $("d-title").textContent = p.title;
+  $("d-date").textContent = (p.created_at||"").slice(0,16);
+  $("d-views").textContent = "👁 " + p.views;
+  $("d-body").textContent = p.content;
+  $("d-tags").innerHTML = (p.tags||"").split(",").filter(Boolean).map(t=>`<span class="tag">#${esc(t)}</span>`).join("");
+  $("m-detail").classList.add("on");
+  loadStats(); loadList();
+}
+
+function openEditor(post){
+  state.editing = post || null;
+  $("e-title").textContent = post ? "编辑文章" : "写文章";
+  $("e-title-input").value = post ? post.title : "";
+  $("e-cat").value = post ? post.category : "学习笔记";
+  $("e-tags").value = post ? post.tags : "";
+  $("e-body").value = post ? post.content : "";
+  $("m-edit").classList.add("on");
+}
+
+async function save(){
+  const token = $("e-token").value.trim();
+  const body = {
+    title: $("e-title-input").value.trim(),
+    category: $("e-cat").value.trim() || "随笔",
+    tags: $("e-tags").value.trim(),
+    content: $("e-body").value.trim(),
+  };
+  try{
+    if(state.editing){
+      await api("/api/posts/"+state.editing.id, {method:"PUT", headers:{"Content-Type":"application/json","x-token":token}, body:JSON.stringify(body)});
+      toast("已保存");
+    }else{
+      await api("/api/posts", {method:"POST", headers:{"Content-Type":"application/json","x-token":token}, body:JSON.stringify(body)});
+      toast("发布成功");
+    }
+    closeAll(); state.page=1; loadStats(); loadList();
+  }catch(e){ toast(e.message); }
+}
+
+async function del(){
+  if(!state.current) return;
+  const token = prompt("输入管理口令确认删除");
+  if(token === null) return;
+  try{
+    await api("/api/posts/"+state.current.id, {method:"DELETE", headers:{"x-token":token}});
+    toast("已删除"); closeAll(); loadStats(); loadList();
+  }catch(e){ toast(e.message); }
+}
+
+$("btn-new").onclick = ()=>openEditor(null);
+$("e-save").onclick = save;
+$("d-edit").onclick = ()=>openEditor(state.current);
+$("d-del").onclick = del;
+$("cat").onchange = (e)=>{ state.category = e.target.value; state.page = 1; loadList(); };
+$("kw").oninput = (e)=>{ clearTimeout(window._t); window._t=setTimeout(()=>{ state.keyword=e.target.value.trim(); state.page=1; loadList(); },250); };
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click", e=>{ if(e.target===m) closeAll(); }));
+
+loadStats(); loadList();
+
+// 演示用：通过 URL 参数直接打开某个状态（便于录屏/截图）
+(async () => {
+  const qs = new URLSearchParams(location.search);
+  if (qs.get("kw")) { state.keyword = qs.get("kw"); $("kw").value = state.keyword; await loadList(); }
+  if (qs.get("cat")) { state.category = qs.get("cat"); await loadList(); }
+  const open = qs.get("open");
+  if (open === "detail") { await openDetail(qs.get("id") || "1"); }
+  if (open === "editor") {
+    openEditor(null);
+    if (qs.get("fill") === "1") {
+      $("e-title-input").value = qs.get("t") || "我的第一个全栈项目复盘";
+      $("e-cat").value = qs.get("c") || "项目复盘";
+      $("e-tags").value = qs.get("g") || "Node,SQLite,全栈";
+      $("e-body").value = qs.get("b") ||
+        "这次用 Vibe Coding 的方式把博客从 0 做到能跑：先定表结构和接口，再写后端，最后接前端。\n\n" +
+        "踩到的坑：中文搜索要编码、分页在切换分类后要重置页码。\n\n" +
+        "收获：全栈链路其实就三件事——页面要数据、接口给数据、数据库存数据。";
+    }
+  }
+})();
+</script>
+</body>
+</html>
